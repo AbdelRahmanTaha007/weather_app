@@ -1,9 +1,8 @@
-// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/cubits/get_weather_cubit/get_weather_cubit.dart';
 import 'package:weather_app/cubits/get_weather_cubit/get_weather_states.dart';
-import 'package:weather_app/main.dart';
+import 'package:weather_app/pages/home_page.dart';
 
 // import 'package:weather_app/models/weather_model.dart';
 
@@ -20,7 +19,19 @@ class SearchPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: getThemeColor(weatherModel?.weatherCondition),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                colors: [
+                  getThemeColor(weatherModel?.weatherCondition),
+                  getThemeColor(weatherModel?.weatherCondition)[300]!,
+                  getThemeColor(weatherModel?.weatherCondition)[200]!,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )),
+            ),
+            // backgroundColor: getColor(weatherModel?.weatherCondition),
             title: const Text('Search a City'),
           ),
           body: Center(
@@ -31,7 +42,11 @@ class SearchPage extends StatelessWidget {
                   //Triggres when pressed on the Search Icon
                   BlocProvider.of<GetWeatherCubit>(context)
                       .getWeather(cityName: data);
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(weatherCondition:weatherModel?.weatherCondition,),
+                      ));
                 },
                 decoration: InputDecoration(
                   contentPadding:
@@ -53,8 +68,3 @@ class SearchPage extends StatelessWidget {
     );
   }
 }
-
-// onChanged: (data) // Triggres every time i press on the keyboard
-            // {
-            //   cityName = data;
-            // },
